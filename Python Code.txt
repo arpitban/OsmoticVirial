@@ -1,0 +1,131 @@
+"""
+Supporting Information for 
+Evaluation of Osmotic Virial Coefficients via Restricted Gibbs Ensemble Simulations, with Support from Gas-Phase Mixture Coefficients
+Published in The Journal of Physical Chemistry B, 2021
+Arpit Bansal, Andrew J. Schultz, and David A. Kofke
+University at Buffalo, The State University of New York, Buffalo, NY 14260-4200 USA
+
+This file contains three python functions OVC_B2, OVC_B3, and OVC_B4 which return the osmotic virial coefficient B2, B3, and B4 respectively as a Taylor series
+expansion in RHO1 (solvent reservoir density). The functions take gas-phase mixture virial coefficients (Bij) as input parameters, where i is the
+solvent index, and j is the solute index.  
+
+The Bij and the density RHO1 should be given in a mutually consistent set of units, which together determine the units of the calculated B2, B3, and B4.
+For example, with Bij given in units of (liter/mol)^(i+j-1), and RHO1 in units of (mol/liter), BN will be in units of (liter/mol)^(N-1)
+"""
+
+def OVC_B2(RHO1=0, B02=0, B11=0, B12=0, B20=0, B21=0, B22=0, B30=0, B31=0, B32=0, B40=0, B41=0, B42=0, B50=0, B51=0, B52=0, B60=0, B61=0, B62=0):
+   A = -2*B11 ** 2 + (3*B12)/2
+   
+   B = 2*(2*B20*B11 ** 2 - 3*B11*B21 + B22)
+   
+   C = (-16*B20 ** 2*B11 ** 2 + 12*B30*B11 ** 2 + 24*B20*B11*B21 - 9*B21 ** 2 - 16*B11*B31 + 5*B32)/2
+   
+   D = (-12*B21*B31 - 10*B11*B41 - (-8*B20 ** 3 + 12*B20*B30 - 4*B40)*(2*B11 ** 2 - (3*B12)/2.) \
+	+ 6*B40*B12 - (4*B20 ** 2 - 3*B30)*(6*B11*B21 - 3*B20*B12 - 2*B22) + 6*B30*B22 \
+	+ B20*(9*B21 ** 2 + 16*B11*B31 - 9*B30*B12 - 8*B20*B22 - 5*B32) + 5*B20*B32 + 3*B42)
+   
+   E = ((-16*B20 ** 4 + 36*B20 ** 2*B30 - 9*B30 ** 2 - 16*B20*B40 + 5*B50)*(2*B11 ** 2 - (3*B12)/2.) \
+	- (-8*B20 ** 3 + 12*B20*B30 - 4*B40)*(6*B11*B21 - 3*B20*B12 - 2*B22) \
+	- ((4*B20 ** 2 - 3*B30)*(9*B21 ** 2 + 16*B11*B31 - 9*B30*B12 - 8*B20*B22 - 5*B32))/2. \
+	+ 2*B20*(12*B21*B31 + 10*B11*B41 - 6*B40*B12 - 6*B30*B22 - 5*B20*B32 - 3*B42) \
+	+ (-16*B31 ** 2 - 30*B21*B41 - 24*B11*B51 + 15*B50*B12 + 16*B40*B22 + 15*B30*B32 + 12*B20*B42 + 7*B52)/2.)
+   
+   F = (-20*B31*B41 - 18*B21*B51 - 14*B11*B61 \
+	- (-32*B20 ** 5 + 96*B20 ** 3*B30 - 54*B20*B30 ** 2 - 48*B20 ** 2*B40 + 24*B30*B40 + 20*B20*B50 - 6*B60)*(2*B11 ** 2 - (3*B12)/2.) \
+	+ 9*B60*B12 - (16*B20 ** 4 - 36*B20 ** 2*B30 + 9*B30 ** 2 + 16*B20*B40 - 5*B50)*(6*B11*B21 - 3*B20*B12 - 2*B22) \
+	+ 10*B50*B22 - ((-8*B20 ** 3 + 12*B20*B30 - 4*B40)*(9*B21 ** 2 + 16*B11*B31 - 9*B30*B12 - 8*B20*B22 - 5*B32))/2. \
+	+ 10*B40*B32 - (4*B20 ** 2 - 3*B30)*(12*B21*B31 + 10*B11*B41 - 6*B40*B12 - 6*B30*B22 - 5*B20*B32 - 3*B42) + 9*B30*B42 \
+	+ B20*(16*B31 ** 2 + 30*B21*B41 + 24*B11*B51 - 15*B50*B12 - 16*B40*B22 - 15*B30*B32 - 12*B20*B42 - 7*B52) + 7*B20*B52 + 4*B62)
+   
+   B2 = B02 + A*RHO1 + B*RHO1**2 + C*RHO1**3 + D*RHO1**4 + E*RHO1**5 + F*RHO1**6
+   
+   print("Osmotic B2 obtained using gas-phase mixture virials is", B2)
+   print("The coefficient of RHO1^1 in Taylor series expansion of osmotic virial B2 is", A)
+   print("The coefficient of RHO1^2 in Taylor series expansion of osmotic virial B2 is", B)
+   print("The coefficient of RHO1^3 in Taylor series expansion of osmotic virial B2 is", C)
+   print("The coefficient of RHO1^4 in Taylor series expansion of osmotic virial B2 is", D)
+   print("The coefficient of RHO1^5 in Taylor series expansion of osmotic virial B2 is", E)
+   print("The coefficient of RHO1^6 in Taylor series expansion of osmotic virial B2 is", F)
+   
+def OVC_B3(RHO1=0, B02=0, B03=0, B11=0, B12=0, B13=0, B20=0, B21=0, B22=0, B23=0, B30=0, B31=0, B32=0, B33=0, B40=0, B41=0, B42=0, B43=0, \
+B50=0, B51=0, B52=0, B53=0, B60=0, B61=0, B62=0):
+   
+   A = 2*(4*B11**3 - 9*B11*B12 + 4*B13)/3
+   
+   B = (-16*B20*B11**3 + 24*B11**2*B21 + 12*B20*B11*B12 - 9*B21*B12 - 16*B11*B22 + 5*B23)
+   
+   C = 2*(32*B20**2*B11**3 - 16*B30*B11**3 - 60*B20*B11**2*B21 + 27*B11*B21**2 + 24*B11**2*B31 - 12*B20**2*B11*B12 \
+     + 9*B30*B11*B12 + 9*B20*B21*B12 - 6*B31*B12 + 16*B20*B11*B22 - 12*B21*B22 - 15*B11*B32 + 4*B33)
+   
+   D = (-640*B20**3*B11**3 + 720*B20*B30*B11**3 - 160*B40*B11**3 + 1296*B20**2*B11**2*B21 - 648*B30*B11**2*B21 - 756*B20*B11*B21**2 \
+     + 108*B21**3 - 672*B20*B11**2*B31 + 576*B11*B21*B31 + 240*B11**2*B41 + 144*B20**3*B11*B12 - 216*B20*B30*B11*B12 + 72*B40*B11*B12 \
+     - 108*B20**2*B21*B12 + 81*B30*B21*B12 + 72*B20*B31*B12 - 45*B41*B12 - 192*B20**2*B11*B22 + 144*B30*B11*B22 + 144*B20*B21*B22 \
+     - 96*B31*B22 + 180*B20*B11*B32 - 135*B21*B32 - 144*B11*B42 + 35*B43)/3
+   
+   E = 2*(320*B20**4*B11**3 - 576*B20**2*B30*B11**3 + 108*B30**2*B11**3 + 192*B20*B40*B11**3 - 40*B50*B11**3 - 672*B20**3*B11**2*B21 \
+     + 756*B20*B30*B11**2*B21 - 168*B40*B11**2*B21 + 432*B20**2*B11*B21**2 - 216*B30*B11*B21**2 - 81*B20*B21**3 + 384*B20**2*B11**2*B31 \
+     - 192*B30*B11**2*B31 - 432*B20*B11*B21*B31 + 90*B21**2*B31 + 80*B11*B31**2 - 180*B20*B11**2*B41 + 150*B11*B21*B41 + 60*B11**2*B51 \
+     - 48*B20**4*B11*B12 + 108*B20**2*B30*B11*B12 - 27*B30**2*B11*B12 - 48*B20*B40*B11*B12 + 15*B50*B11*B12 + 36*B20**3*B21*B12 \
+     - 54*B20*B30*B21*B12 + 18*B40*B21*B12 - 24*B20**2*B31*B12 + 18*B30*B31*B12 + 15*B20*B41*B12 - 9*B51*B12 + 64*B20**3*B11*B22 \
+     - 96*B20*B30*B11*B22 + 32*B40*B11*B22 - 48*B20**2*B21*B22 + 36*B30*B21*B22 + 32*B20*B31*B22 - 20*B41*B22 - 60*B20**2*B11*B32 \
+     + 45*B30*B11*B32 + 45*B20*B21*B32 - 30*B31*B32 + 48*B20*B11*B42 - 36*B21*B42 - 35*B11*B52 + 8*B53)
+   
+   B3 = B03 + A*RHO1 + B*RHO1**2 + C*RHO1**3 + D*RHO1**4* + E*RHO1**5
+   
+   print("Osmotic B3 obtained using gas-phase mixture virials is", B3)
+   print("The coefficient of RHO1^1 in Taylor series expansion of osmotic virial B3 is", A)
+   print("The coefficient of RHO1^2 in Taylor series expansion of osmotic virial B3 is", B)
+   print("The coefficient of RHO1^3 in Taylor series expansion of osmotic virial B3 is", C)
+   print("The coefficient of RHO1^4 in Taylor series expansion of osmotic virial B3 is", D)
+   print("The coefficient of RHO1^5 in Taylor series expansion of osmotic virial B3 is", E)
+
+def OVC_B4(RHO1=0, B02=0, B03=0, B04=0, B11=0, B12=0, B13=0, B14=0, B20=0, B21=0, B22=0, B23=0, B24=0, B30=0, B31=0, B32=0, B33=0, B34=0, B40=0, B41=0, B42=0, B43=0, B44=0,\
+B50=0, B51=0, B52=0, B53=0, B60=0, B61=0, B62=0):
+   
+   A = -2*B11**4 + 9*B11**2*B12 - 8*B11*B13 - 3.375*B12**2 + 3.75*B14
+   
+   B = (56*B20*B11**4 - 108*B20*B11**2*B12 + 32*B20*B11*B13 + 13.5*B20*B12**2 - 96*B11**3*B21 + 96*B11**2*B22 + 108*B11*B21*B12 \
+     - 60*B11*B23 - 24*B21*B13 - 36*B12*B22 + 18*B24)/2
+   
+   C = (-1200*B20**2*B11**4 + 1296*B20**2*B11**2*B12 - 192*B20**2*B11*B13 - 81*B20**2*B12**2 + 2736*B20*B11**3*B21 \
+     - 1440*B20*B11**2*B22 - 1620*B20*B11*B21*B12 + 360*B20*B11*B23 + 144*B20*B21*B13 + 216*B20*B12*B22 + 468*B30*B11**4 \
+     - 648*B30*B11**2*B12 + 144*B30*B11*B13 + 60.75*B30*B12**2 - 864*B11**3*B31 - 1458*B11**2*B21**2 + 810*B11**2*B32 + 1296*B11*B21*B22 \
+     + 648*B11*B31*B12 - 432*B11*B33 + 364.5*B21**2*B12 - 270*B21*B23 - 96*B31*B13 - 202.5*B12*B32 - 144*B22**2 + 105*B34)/6
+   
+   D = (24960*B20**3*B11**4 - 14400*B20**3*B11**2*B12 + 768*B20**3*B11*B13 + 432*B20**3*B12**2 - 60480*B20**2*B11**3*B21 \
+     + 18432*B20**2*B11**2*B22 + 16200*B20**2*B11*B21*B12 - 1440*B20**2*B11*B23 - 576*B20**2*B21*B13 - 1152*B20**2*B12*B22 \
+     - 23040*B20*B30*B11**4 + 16200*B20*B30*B11**2*B12 - 1152*B20*B30*B11*B13 - 648*B20*B30*B12**2 + 26880*B20*B11**3*B31 \
+     + 44064*B20*B11**2*B21**2 - 14040*B20*B11**2*B32 - 19008*B20*B11*B21*B22 - 7200*B20*B11*B31*B12 + 1728*B20*B11*B33 - 4050*B20*B21**2*B12 \
+     + 1080*B20*B21*B23 + 384*B20*B31*B13 + 1080*B20*B12*B32 + 768*B20*B22**2 + 23112*B30*B11**3*B21 - 9216*B30*B11**2*B22 \
+     - 8100*B30*B11*B21*B12 + 1080*B30*B11*B23 + 432*B30*B21*B13 + 864*B30*B12*B22 + 4032*B40*B11**4 - 3600*B40*B11**2*B12 + 384*B40*B11*B13 \
+     + 216*B40*B12**2 - 7320*B11**3*B41 - 25200*B11**2*B21*B31 + 6624*B11**2*B42 - 9234*B11*B21**3 + 11610*B11*B21*B32 \
+     - 36*B11*B21*(16*B20**2*B11**2 - 24*B20*B11*B21 - 12*B30*B11**2 + 16*B11*B31 + 9*B21**2 - 5*B32) \
+     + 6*B11*B21*(12*B20**2*B12 + 32*B20*B22 + 12*B30*B11**2 + 18*B30*B12 - 24*B11*(B20*B21 + 2*B31) - 27*B21**2 + 15*B32) \
+     + 6528*B11*B31*B22 + 2250*B11*B41*B12 - 3360*B11*B43 + 3240*B21**2*B22 + 2700*B21*B31*B12 - 648*B21*B33 - 720*B31*B23 - 240*B41*B13 \
+     - 864*B12*B42 - 6*B12*(-108*B20*B21**2 + 144*B21*B31) + 18*B12*(2*B11*(-32*B20*B31 + B21*(36*B20**2 - 18*B30) + 15*B41) + 12*B21*B31 \
+     + 3*B21*(-12*B20*B21 + 8*B31)) + 12*B12*(3*B11*(-32*B20*B31 + B21*(36*B20**2 - 18*B30) + 15*B41) + 54*B21*B31 + 9*B21*(-12*B20*B21 + 8*B31)) \
+     - 3*B12*(32*B20**2*B22 + 4*B20*(9*B30*B12 - 9*B21**2 + 15*B32) + 48*B30*B22 + 32*B40*B11**2 + 24*B40*B12 - 8*B11*(8*B20*B31 + 10*B41) \
+     - 96*B21*B31 + 24*B42) - 48*B12*(16*B20**3*B11**2 - 24*B20**2*B11*B21 - 24*B20*B30*B11**2 + 16*B20*B11*B31 + 9*B20*B21**2 + 18*B30*B11*B21 \
+     + 8*B40*B11**2 - 10*B11*B41 - 12*B21*B31 + 3*B42) - 1440*B22*B32 + 6*B22*(8*B11*(-12*B20*B21 + 8*B31) + 36*B21**2) \
+     + 12*B22*(8*B11*(-12*B20*B21 + 8*B31) + 72*B21**2) + 6*B13*(-64*B20*B31 + 4*B21*(12*B20**2 - 9*B30) + 60*B41) \
+     - 12*B13*(-48*B20*B31 + 4*B11*(-8*B20**3 + 12*B20*B30 - 4*B40) + 4*B21*(12*B20**2 - 9*B30) + 40*B41) \
+     - 24*B13*(-8*B20*B31 + B11*(-16*B20**3 + 24*B20*B30 - 8*B40) + B21*(12*B20**2 - 9*B30) + 5*B41) + 6*B23*(-90*B20*B21 + 120*B31) \
+     - 12*B23*(-90*B20*B21 + 15*B11*(4*B20**2 - 3*B30) + 90*B31) - 18*B23*(-30*B20*B21 + 5*B11*(8*B20**2 - 6*B30) + 20*B31) \
+     + 6*B33*(-96*B20*B11 + 72*B21) - 12*B33*(-72*B20*B11 + 108*B21) - 24*B33*(-60*B20*B11 + 45*B21) + 720*B44 \
+     + (-4*B11**2 + 3*B12)*(2*B11*(-64*B20*B31 + B21*(120*B20**2 - 36*B30) + 15*B41) + 12*B21*B31 + 3*B21*(-24*B20*B21 + 8*B31)) \
+     + 2*(-4*B11**2 + 3*B12)*(2*B11*(-32*B20*B31 + B21*(36*B20**2 - 18*B30) + 15*B41) + 12*B21*B31 + 3*B21*(-12*B20*B21 + 8*B31)) \
+     - 1*(-4*B11**2 + 3*B12)*(-90*B20*B32 + B12*(-240*B20**3 + 216*B20*B30 - 36*B40) + B22*(192*B20**2 - 72*B30) + 24*B42) \
+     - 2*(-4*B11**2 + 3*B12)*(-30*B20*B32 + B12*(-24*B20**3 + 36*B20*B30 - 12*B40) + B22*(32*B20**2 - 24*B30) + 24*B42) \
+     - 1*(-18*B20*B12 + 8*B22)*(12*B20**2*B12 + 32*B20*B22 + 12*B30*B11**2 + 18*B30*B12 - 24*B11*(B20*B21 + 2*B31) - 27*B21**2 + 15*B32) \
+     - 2*(18*B20*B12 - 24*B22)*(16*B20**2*B11**2 - 24*B20*B11*B21 - 12*B30*B11**2 + 16*B11*B31 + 9*B21**2 - 5*B32) \
+     - 1*(8*B11*(-24*B20*B21 + 8*B31) + 36*B21**2)*(-3*B20*B12 + 6*B11*B21 - 2*B22) + 2*(16*B11*(-12*B20*B21 + 8*B31) \
+     + 72*B21**2)*(2*B20*B11**2 - 3*B11*B21 + B22) - 2*(16*B20*B11**2 - 24*B11*B21 + 8*B22)*(-16*B20*B22 + B12*(12*B20**2 - 9*B30) \
+     + 15*B32) + (-12*B20*B12 + 24*B11*B21 - 8*B22)*(-48*B20*B22 + B12*(72*B20**2 - 27*B30) + 15*B32))/24
+      
+   B4 = B04 + A*RHO1 + B*RHO1**2 + C*RHO1**3 + D*RHO1**4
+   
+   print("Osmotic B4 obtained using gas-phase mixture virials is", B4)
+   print("The coefficient of RHO1^1 in Taylor series expansion of osmotic virial B4 is", A)
+   print("The coefficient of RHO1^2 in Taylor series expansion of osmotic virial B4 is", B)
+   print("The coefficient of RHO1^3 in Taylor series expansion of osmotic virial B4 is", C)
+   print("The coefficient of RHO1^4 in Taylor series expansion of osmotic virial B4 is", D)
